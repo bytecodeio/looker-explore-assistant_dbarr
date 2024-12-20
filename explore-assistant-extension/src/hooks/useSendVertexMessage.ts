@@ -119,9 +119,17 @@ const useSendVertexMessage = () => {
     parameters: ModelParameters,
   ) => {
     const body = JSON.stringify({
-      contents: contents,
-      parameters: parameters,
-      client_secret: extensionSDK.createSecretKeyTag("ai_cf_auth_token")
+      product: "mfa",
+      prompt: contents,
+      confirmation: "",
+      chat_session_id: "some_chat_session_id",
+      flow_id: "some_flow_id",
+      user: {
+        vanity_host: "sat2016h.sat.realpage.com",
+        company_id: "some_company_id",
+        property_id: "some_property_id",
+        user_id: "some_user_id",
+      },
     })
 
     try {
@@ -130,6 +138,7 @@ const useSendVertexMessage = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': extensionSDK.createSecretKeyTag("ai_cf_auth_token"),
         },
         body: body,
       })
