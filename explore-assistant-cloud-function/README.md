@@ -6,7 +6,7 @@ This cloud function provides an API for generating Looker queries using the Vert
 
 The cloud function integrates with Vertex AI and utilizes the `GenerativeModel` class to generate content based on input parameters. Here's a step-by-step breakdown of its operation:
 
-1. **Environment Setup**: The function initializes with the Vertex AI environment, requiring `PROJECT` and `REGION` environment variables to be set for connecting to the Vertex AI services.
+1. **Environment Setup**: The function initializes with the AI engine, requiring `PROJECT` and `REGION` environment variables to be set for connecting to the Vertex AI services.
 
 2. **Query Generation**: The core functionality lies in the `generate_looker_query` function, which accepts a natural language query (`contents`) and optional parameters (`parameters`) to customize the AI generation process.
 
@@ -45,7 +45,7 @@ To set up and run the function locally, follow these steps:
 3. Run the function locally by executing the main script:
 
     ```bash
-    PROJECT=XXXX LOCATION=us-central-1 VERTEX_CF_AUTH_TOKEN=$(cat ../.vertex_cf_auth_token) python main.py
+    PROJECT=XXXX LOCATION=us-central-1 AI_CF_AUTH_TOKEN=$(cat ../.ai_cf_auth_token) python main.py
     ```
 
 4. Test calling the endpoint locally with a custom query and parameter declaration
@@ -63,7 +63,7 @@ By default, the cloud function will use a default model. However, you may want t
 In development, you can run the main script with a new MODEL_NAME variable:
 
 ```bash
-PROJECT=XXXX LOCATION=us-central-1 VERTEX_CF_AUTH_TOKEN=$(cat ../.vertex_cf_auth_token) MODEL_NAME=XXXXX python main.py
+PROJECT=XXXX LOCATION=us-central-1 AI_CF_AUTH_TOKEN=$(cat ../.ai_cf_auth_token) MODEL_NAME=XXXXX python main.py
 ```
 
 In production, on the cloud function, you can manually set a variable in the GCP UI. Updating the variable will re-deploy the cloud function.

@@ -48,7 +48,7 @@ To use the remote backend you can run `./init.sh remote` instead of `terraform i
 
 If in the `/explore-assistant-backend` cd back to root (ie. `cd ..`) and run the following command:
 ```bash
-openssl rand -base64 32 > .vertex_cf_auth_token
+openssl rand -base64 32 > .ai_cf_auth_token
 
 ```
 
@@ -61,7 +61,7 @@ cd terraform
 export TF_VAR_project_id=(PASTE BQ PROJECT ID HERE)
 export TF_VAR_use_bigquery_backend=0
 export TF_VAR_use_cloud_function_backend=1
-export TF_VAR_looker_auth_token=$(cat ../../.vertex_cf_auth_token)
+export TF_VAR_looker_auth_token=$(cat ../../.ai_cf_auth_token)
 terraform init
 terraform plan
 terraform apply

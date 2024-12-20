@@ -68,6 +68,8 @@ export const ExploreEmbed = ({
 
   const setExploreLoading = (_explore: any) => {}
 
+  const theme = 'RealPage'
+
   useEffect(() => {
     const hostUrl = extensionSDK?.lookerHostData?.hostUrl
     const el = ref.current
@@ -81,6 +83,7 @@ export const ExploreEmbed = ({
           background_color: '#f4f6fa',
         }),
         toggle: 'pik,vis,dat',
+        theme: theme
       }
 
       if (settings['show_explore_data'].value) {

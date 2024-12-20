@@ -30,7 +30,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ open, onClose }) => {
   const [userAttributes, setUserAttributes] = useState<{ id: string | undefined, name: string }[]>([])
   const [expandedSetting, setExpandedSetting] = useState<string | null>(null)
 
-  const VERTEX_CF_AUTH_TOKEN = 'vertex_cf_auth_token'
+  const AI_CF_AUTH_TOKEN = 'ai_cf_auth_token'
 
   const [bigQueryTestResult, setBigQueryTestResult] = useState<boolean | null>(null)
   const [vertexTestResult, setVertexTestResult] = useState<boolean | null>(null)
@@ -107,7 +107,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ open, onClose }) => {
             label: prefixedId,
             type: 'string',
             default_value: value,
-            value_is_hidden: id === VERTEX_CF_AUTH_TOKEN,
+            value_is_hidden: id === AI_CF_AUTH_TOKEN,
             user_can_view: false,
             user_can_edit: false,
           })
@@ -119,7 +119,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ open, onClose }) => {
             label: prefixedId,
             type: 'string',
             default_value: value,
-            value_is_hidden: id === VERTEX_CF_AUTH_TOKEN,
+            value_is_hidden: id === AI_CF_AUTH_TOKEN,
             user_can_view: false,
             user_can_edit: false,
             // May be unnecessary since we're using an extension framework, the domain is the server itself.
@@ -163,7 +163,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ open, onClose }) => {
   const filteredSettings = Object.entries(settings).filter(([id]) => {
     if (id === 'useCloudFunction' || id === 'show_explore_data') return true
     if (settings.useCloudFunction.value) {
-      return id === 'vertex_ai_endpoint' || id === 'vertex_cf_auth_token'
+      return id === 'ai_endpoint' || id === 'ai_cf_auth_token'
     } else {
       return false
     }
@@ -210,7 +210,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ open, onClose }) => {
                   />
                 ) : (
                   <input
-                    type={id === VERTEX_CF_AUTH_TOKEN ? 'password' : 'text'}
+                    type={id === AI_CF_AUTH_TOKEN ? 'password' : 'text'}
                     value={String(setting.value)}
                     onChange={(e) => handleSaveSetting(id, e.target.value)}
                     className={styles.inputField}

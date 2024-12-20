@@ -65,7 +65,7 @@ const useSendVertexMessage = () => {
   const VERTEX_BIGQUERY_LOOKER_CONNECTION_NAME =
     settings['vertex_bigquery_looker_connection_name']?.value || ''
   const VERTEX_BIGQUERY_MODEL_ID = settings['vertex_bigquery_model_id']?.value || ''
-  const VERTEX_AI_ENDPOINT = settings['vertex_ai_endpoint']?.value as string || '' as string
+  const AI_ENDPOINT = settings['ai_endpoint']?.value as string || '' as string
 
   const currentExploreKey = currentExplore.exploreKey
   const exploreRefinementExamples =
@@ -114,19 +114,19 @@ const useSendVertexMessage = () => {
     }
   }
 
-  const vertexCloudFunction = async (
+  const cloudFunction = async (
     contents: string,
     parameters: ModelParameters,
   ) => {
     const body = JSON.stringify({
       contents: contents,
       parameters: parameters,
-      client_secret: extensionSDK.createSecretKeyTag("vertex_cf_auth_token")
+      client_secret: extensionSDK.createSecretKeyTag("ai_cf_auth_token")
     })
 
     try {
-      console.log('Sending request to Vertex Cloud Function with body:', body)
-      const response = await extensionSDK.fetchProxy(VERTEX_AI_ENDPOINT, {
+      console.log('Sending request to AI Function with body:', body)
+      const response = await extensionSDK.fetchProxy(AI_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -144,7 +144,7 @@ const useSendVertexMessage = () => {
         return `Error: ${response.statusText}`
       }
     } catch (error) {
-      console.error('Error sending request to Vertex Cloud Function:', error)
+      console.error('Error sending request to AI Function:', error)
       throw error
     }
   }
@@ -650,7 +650,7 @@ ${exploreRefinementExamples &&
     const wrappedMessage = promptWrapper(message)
     try {
       if (
-        VERTEX_AI_ENDPOINT &&
+        AI_ENDPOINT &&
         VERTEX_BIGQUERY_LOOKER_CONNECTION_NAME &&
         VERTEX_BIGQUERY_MODEL_ID
       ) {
@@ -660,15 +660,15 @@ ${exploreRefinementExamples &&
       }
 
       let response = ''
-      if (VERTEX_AI_ENDPOINT) {
-        response = await vertexCloudFunction(wrappedMessage, parameters)
+      if (AI_ENDPOINT) {
+        response = await cloudFunction(wrappedMessage, parameters)
       } else if (
         VERTEX_BIGQUERY_LOOKER_CONNECTION_NAME &&
         VERTEX_BIGQUERY_MODEL_ID
       ) {
         response = await vertexBigQuery(wrappedMessage, parameters)
       } else {
-        throw new Error('No Vertex AI or BigQuery connection found')
+        throw new Error('No AI or BigQuery connection found')
       }
 
       return typeof response === 'string' ? response : JSON.stringify(response)
@@ -679,14 +679,14 @@ ${exploreRefinementExamples &&
   }
 
   const testVertexSettings = async () => {
-    if (settings.useCloudFunction.value && (!VERTEX_AI_ENDPOINT)) {
+    if (settings.useCloudFunction.value && (!AI_ENDPOINT)) {
       return false
     }
     if (!settings.useCloudFunction.value && (!VERTEX_BIGQUERY_LOOKER_CONNECTION_NAME || !VERTEX_BIGQUERY_MODEL_ID)) {
       return false
     }
     try {
-      const response = settings.useCloudFunction.value ? await vertexCloudFunction('test', {}) : await vertexBigQuery('test', {})
+      const response = settings.useCloudFunction.value ? await cloudFunction('test', {}) : await vertexBigQuery('test', {})
       
       if (response !== '') {
         dispatch(setVertexTestSuccessful(true))

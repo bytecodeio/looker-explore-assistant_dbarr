@@ -22,9 +22,9 @@ resource "google_project_iam_member" "iam_permission_looker_aiplatform" {
   member  = format("serviceAccount:%s", google_service_account.explore-assistant-sa.email)
 }
 
-resource "google_secret_manager_secret" "vertex_cf_auth_token" {
+resource "google_secret_manager_secret" "ai_cf_auth_token" {
   project   = var.project_id
-  secret_id = "VERTEX_CF_AUTH_TOKEN"
+  secret_id = "AI_CF_AUTH_TOKEN"
   replication {
     user_managed {
       replicas {
@@ -35,20 +35,20 @@ resource "google_secret_manager_secret" "vertex_cf_auth_token" {
 }
 
 locals {
-  auth_token_file_path = "${path.module}/../../../.vertex_cf_auth_token"
+  auth_token_file_path = "${path.module}/../../../.ai_cf_auth_token"
   auth_token_file_exists = fileexists(local.auth_token_file_path)
   auth_token_file_content = local.auth_token_file_exists ? file(local.auth_token_file_path) : ""
 }
 
-resource "google_secret_manager_secret_version" "vertex_cf_auth_token_version" {
+resource "google_secret_manager_secret_version" "ai_cf_auth_token_version" {
   count       = local.auth_token_file_exists ? 1 : 0
-  secret      = google_secret_manager_secret.vertex_cf_auth_token.name
+  secret      = google_secret_manager_secret.ai_cf_auth_token.name
   secret_data = local.auth_token_file_content
 
 }
 
-resource "google_secret_manager_secret_iam_binding" "vertex_cf_auth_token_accessor" {
-  secret_id = google_secret_manager_secret.vertex_cf_auth_token.secret_id
+resource "google_secret_manager_secret_iam_binding" "ai_cf_auth_token_accessor" {
+  secret_id = google_secret_manager_secret.ai_cf_auth_token.secret_id
   role      = "roles/secretmanager.secretAccessor"
   members   = [
     "serviceAccount:${google_service_account.explore-assistant-sa.email}",
@@ -120,9 +120,9 @@ resource "google_cloudfunctions2_function" "default" {
     }
 
     secret_environment_variables {
-      key     = "VERTEX_CF_AUTH_TOKEN"
+      key     = "AI_CF_AUTH_TOKEN"
       project_id = var.project_id
-      secret  = google_secret_manager_secret.vertex_cf_auth_token.secret_id
+      secret  = google_secret_manager_secret.ai_cf_auth_token.secret_id
       version = "latest"
     }
 

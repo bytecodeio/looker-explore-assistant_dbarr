@@ -10,7 +10,7 @@ terraform.tfstate*
 node_modules
 looker.ini
 
-.vertex_cf_auth_token
+.ai_cf_auth_token
 dist
 
 explore-assistant-backend/terraform/backend.tf

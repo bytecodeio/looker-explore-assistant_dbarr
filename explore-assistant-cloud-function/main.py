@@ -35,14 +35,14 @@ logging.basicConfig(level=logging.INFO)
 # Initialize the Vertex AI
 project = os.environ.get("PROJECT")
 location = os.environ.get("REGION")
-vertex_cf_auth_token = os.environ.get("VERTEX_CF_AUTH_TOKEN")
+ai_cf_auth_token = os.environ.get("AI_CF_AUTH_TOKEN")
 model_name = os.environ.get("MODEL_NAME", "gemini-1.0-pro-001")
 
 vertexai.init(project=project, location=location)
 
 def verify_client_secret(request):
     client_secret = request.json.get("client_secret")
-    if client_secret == vertex_cf_auth_token:
+    if client_secret == ai_cf_auth_token:
         logging.info('Client secret verified')
         return True
     else:

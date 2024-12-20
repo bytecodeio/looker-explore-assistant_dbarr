@@ -181,14 +181,14 @@ export const initialState: AssistantState = {
       description: 'Toggle between Cloud Function and BigQuery',
       value: true,
     },
-    vertex_ai_endpoint: {
-      name: 'Vertex AI Endpoint',
-      description: 'This is your deployed cloud function endpoint with access to Vertex AI',
+    ai_endpoint: {
+      name: 'AI Endpoint',
+      description: 'This is your deployed endpoint with access to an AI engine',
       value: '',
     },
-    vertex_cf_auth_token: {
-      name: 'Vertex CF Auth Token',
-      description: 'This is the token used to communicate with the cloud function',
+    ai_cf_auth_token: {
+      name: 'Auth Token',
+      description: 'This is the token used to communicate with the AI Engine',
       value: '',
     },
     

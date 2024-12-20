@@ -25,7 +25,7 @@ def main():
     }
 
     # Read the secret key from a file
-    with open('../.vertex_cf_auth_token', 'r') as file:
+    with open('../.ai_cf_auth_token', 'r') as file:
         secret_key = file.read().strip()  # Remove any potential newline characters
 
     # Set the client secret in the payload
