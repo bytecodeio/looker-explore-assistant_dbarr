@@ -134,7 +134,7 @@ const useSendVertexMessage = () => {
 
     try {
       console.log('Sending request to AI Function with body:', body)
-      const response = await extensionSDK.fetchProxy(AI_ENDPOINT, {
+      const response = await extensionSDK.serverProxy(AI_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -143,6 +143,10 @@ const useSendVertexMessage = () => {
         body: body,
       })
       console.log('Response from serverProxy:', response)
+
+      if (response.status === 401) {
+        throw new Error('Unauthorized: Failed to authenticate with improperly formatted auth header')
+      }
 
       if (response.ok) {
         const responseData = await response.body
@@ -697,12 +701,12 @@ ${exploreRefinementExamples &&
     try {
       const response = settings.useCloudFunction.value ? await cloudFunction('test', {}) : await vertexBigQuery('test', {})
       
-      if (response !== '') {
+      if (response !== '' && !response.includes('Failed to authenticate')) {
         dispatch(setVertexTestSuccessful(true))
       } else {
         dispatch(setVertexTestSuccessful(false))
       }
-      return response !== ''
+      return response !== '' && !response.includes('Failed to authenticate')
     } catch (error) {
       console.error('Error testing Vertex settings:', error)
       dispatch(setVertexTestSuccessful(false))

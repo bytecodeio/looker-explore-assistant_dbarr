@@ -230,7 +230,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ open, onClose }) => {
             BigQuery Settings Test: {bigQueryTestResult === null ? 'Testing...' : bigQueryTestResult ? <span className={styles.passed}>Passed</span> : <span className={styles.failed}>Failed</span>}
           </Typography>
           <Typography variant="body2">
-            Vertex Settings Test: {vertexTestResult === null ? 'Testing...' : vertexTestResult ? <span className={styles.passed}>Passed</span> : <span className={styles.failed}>Failed</span>}
+            AI Agent Settings Test: {vertexTestResult === null ? 'Testing...' : vertexTestResult ? <span className={styles.passed}>Passed</span> : <span className={styles.failed}>Failed</span>}
           </Typography>
         </div>
         <button onClick={handleTestAndSave} className={styles.button}>Test and Save</button>

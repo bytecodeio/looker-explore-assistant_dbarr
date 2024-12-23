@@ -21,7 +21,8 @@ export const useBigQueryExamples = () => {
   const { isBigQueryMetadataLoaded } = useSelector((state: RootState) => state.assistant as AssistantState)
   
   const { core40SDK, lookerHostData } = useContext(ExtensionContext)
-  const modelName = lookerHostData?.extensionId.split('::')[0]
+  const modelName = 'explore_assistant'
+  // lookerHostData?.extensionId.split('::')[0]
   
   const runExampleQuery = async () => {
     try {
