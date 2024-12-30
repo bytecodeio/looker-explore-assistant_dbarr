@@ -107,7 +107,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ open, onClose }) => {
             label: prefixedId,
             type: 'string',
             default_value: value,
-            value_is_hidden: id === AI_CF_AUTH_TOKEN,
+            value_is_hidden: false,
             user_can_view: false,
             user_can_edit: false,
           })
@@ -119,11 +119,10 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ open, onClose }) => {
             label: prefixedId,
             type: 'string',
             default_value: value,
-            value_is_hidden: id === AI_CF_AUTH_TOKEN,
             user_can_view: false,
             user_can_edit: false,
             // May be unnecessary since we're using an extension framework, the domain is the server itself.
-            hidden_value_domain_whitelist: "https://explore-assistant-api-730192175971.us-central1.run.app"
+            // hidden_value_domain_whitelist: "https://explore-assistant-api-730192175971.us-central1.run.app"
           })
         )
         setUserAttributes([...userAttributes, { id: newUserAttribute.id, name: prefixedId }])
@@ -210,7 +209,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ open, onClose }) => {
                   />
                 ) : (
                   <input
-                    type={id === AI_CF_AUTH_TOKEN ? 'password' : 'text'}
+                    type='text'
                     value={String(setting.value)}
                     onChange={(e) => handleSaveSetting(id, e.target.value)}
                     className={styles.inputField}

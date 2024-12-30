@@ -35,6 +35,7 @@ import { Spinner } from '@looker/components'
 import { ErrorBoundary } from 'react-error-boundary'
 import Fallback from './components/Error/ErrorFallback'
 import { ComponentsProvider } from '@looker/components'
+import { BrowserRouter as Router } from 'react-router-dom' // Import BrowserRouter
 
 const getRoot = () => {
   const id = 'extension-root'
@@ -73,7 +74,9 @@ const render = (Component: typeof App) => {
              <ErrorBoundary 
               FallbackComponent={Fallback} 
               onError={logError}>
-              <Component />
+              <Router> {/* Wrap the App component with Router */}
+                <Component />
+              </Router>
              </ErrorBoundary>
             </ComponentsProvider>
           </ExtensionProvider>

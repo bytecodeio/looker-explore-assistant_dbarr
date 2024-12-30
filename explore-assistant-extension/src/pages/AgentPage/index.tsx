@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom' // Import Link from react-router-dom
 import PromptInput from './PromptInput'
 import Sidebar from './Sidebar'
 import { v4 as uuidv4 } from 'uuid'
@@ -49,6 +50,10 @@ const toCamelCase = (input: string): string => {
 }
 
 const AgentPage = () => {
+  useEffect(() => {
+    console.log('AgentPage rendered') // Add logging
+  }, [])
+
   const endOfMessagesRef = useRef<HTMLDivElement>(null) // Ref for the last message
   const dispatch = useDispatch()
   const [expanded, setExpanded] = useState(false)
@@ -252,8 +257,17 @@ const AgentPage = () => {
 
   return (
     <div className="relative page-container flex h-screen">
+      <nav className="left-nav">
+        <ul>
+          <li>
+            <Link to="/explore-assistant">Explore Assistant</Link>
+          </li>
+          <li>
+            <Link to="/dashboard">Dashboard</Link>
+          </li>
+        </ul>
+      </nav>
       <Sidebar expanded={expanded} toggleDrawer={toggleDrawer} />
-
       <main
         className={`flex-grow flex flex-col transition-all duration-300 ${
           expanded ? 'ml-80' : 'ml-16'

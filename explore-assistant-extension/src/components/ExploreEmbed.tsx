@@ -90,6 +90,8 @@ export const ExploreEmbed = ({
         paramsObj['toggle'] = 'pik,vis'
       }
 
+      paramsObj['theme'] = 'RealPage'
+
       const encodedParams = ExploreHelper.encodeExploreParams(exploreParams)
       for (const key in encodedParams) {
         paramsObj[key] = encodedParams[key]

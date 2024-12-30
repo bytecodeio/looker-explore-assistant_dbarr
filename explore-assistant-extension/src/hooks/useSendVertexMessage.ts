@@ -2,7 +2,7 @@ import { ExtensionContext } from '@looker/extension-sdk-react'
 import { useCallback, useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../store'
-import { useErrorBoundary } from 'react-error-boundary'
+import { ErrorBoundary, useErrorBoundary } from 'react-error-boundary'
 import { AssistantState, setVertexTestSuccessful } from '../slices/assistantSlice'
 
 import looker_filter_doc from '../documents/looker_filter_doc.md'
@@ -62,15 +62,19 @@ const useSendVertexMessage = () => {
   const { settings, examples, currentExplore } = useSelector(
     (state: RootState) => state.assistant as AssistantState,
   )
+  
+  // showBoundary(settings)
   const VERTEX_BIGQUERY_LOOKER_CONNECTION_NAME =
     settings['vertex_bigquery_looker_connection_name']?.value || ''
   const VERTEX_BIGQUERY_MODEL_ID = settings['vertex_bigquery_model_id']?.value || ''
   const AI_ENDPOINT = settings['ai_endpoint']?.value as string || '' as string
+  const ai_cf_auth_token = settings['ai_cf_auth_token']?.value as string || '' as string
+
+
 
   const currentExploreKey = currentExplore.exploreKey
   const exploreRefinementExamples =
     examples.exploreRefinementExamples[currentExploreKey]
-  const trustedDashboards = examples.trustedDashboards[currentExploreKey]
 
   const modelName = lookerHostData?.extensionId.split('::')[0]
 
@@ -113,11 +117,11 @@ const useSendVertexMessage = () => {
       throw new Error('error')
     }
   }
-
   const cloudFunction = async (
     contents: string,
     parameters: ModelParameters,
   ) => {
+  
     const body = JSON.stringify({
       product: "mfa",
       prompt: contents,
@@ -131,23 +135,23 @@ const useSendVertexMessage = () => {
         user_id: "some_user_id",
       },
     })
-
+  
     try {
       console.log('Sending request to AI Function with body:', body)
       const response = await extensionSDK.serverProxy(AI_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': extensionSDK.createSecretKeyTag("ai_cf_auth_token"),
+          'Authorization': `Bearer a3cf28da93a341d59ceba9d9cd7a99d1`,
         },
         body: body,
       })
       console.log('Response from serverProxy:', response)
-
+  
       if (response.status === 401) {
         throw new Error('Unauthorized: Failed to authenticate with improperly formatted auth header')
       }
-
+  
       if (response.ok) {
         const responseData = await response.body
         console.log('Response data:', responseData)
@@ -158,6 +162,57 @@ const useSendVertexMessage = () => {
       }
     } catch (error) {
       console.error('Error sending request to AI Function:', error)
+      throw error
+    }
+  }
+
+  const cloudFunctionWithContext = async (
+    contents: string,
+    parameters: ModelParameters,
+    sharedContext: object,
+  ) => {
+
+    const body = JSON.stringify({
+      product: "mfa",
+      prompt: contents,
+      confirmation: "",
+      chat_session_id: "some_chat_session_id",
+      flow_id: "some_flow_id",
+      user: {
+        vanity_host: "sat2016h.sat.realpage.com",
+        company_id: "some_company_id",
+        property_id: "some_property_id",
+        user_id: "some_user_id",
+      },
+      context: sharedContext,
+    })
+
+    try {
+      console.log('Sending request to AI Function with context and body:', body)
+      const response = await extensionSDK.serverProxy(AI_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${ai_cf_auth_token}`,
+        },
+        body: body,
+      })
+      console.log('Response from serverProxy with context:', response)
+
+      if (response.status === 401) {
+        throw new Error('Unauthorized: Failed to authenticate with improperly formatted auth header')
+      }
+
+      if (response.ok) {
+        const responseData = await response.body
+        console.log('Response data with context:', responseData)
+        return responseData.trim()
+      } else {
+        console.error('Error response from serverProxy with context:', response.statusText)
+        return `Error: ${response.statusText}`
+      }
+    } catch (error) {
+      console.error('Error sending request to AI Function with context:', error)
       throw error
     }
   }
@@ -255,6 +310,49 @@ ${exploreRefinementExamples &&
       # End Examples
       
   `}
+
+  interface ShadowContext {
+    documentation: {
+      filters: string,
+      intervals_timeframes: string,
+      visualizations: string,
+    },
+    metadata: {
+      model: string,
+      explore: string,
+      dimensions: string[],
+      measures: string[],
+    },
+    examples: string,
+    prompt: string,
+  }
+
+  const generateSharedContextForShadow = (prompt: string, dimensions: any[], measures: any[], exploreGenerationExamples: any[]): ShadowContext | undefined => {
+    if (!dimensions.length || !measures.length) {
+      showBoundary(new Error('Dimensions or measures are not defined'))
+      return 
+    }
+    let exampleText = ''
+    if (exploreGenerationExamples && exploreGenerationExamples.length > 0) {
+      exampleText = exploreGenerationExamples.map((item) => `input: "${item.input}" ; output: ${JSON.stringify(parseLookerURL(item.output))}`).join('\n')
+    }
+    return {
+      documentation: {
+        filters: looker_filter_doc,
+        intervals_timeframes: looker_filters_interval_tf,
+        visualizations: looker_visualization_doc,
+      },
+      metadata: {
+        model: currentExplore.modelName,
+        explore: currentExplore.exploreId,
+        dimensions: dimensions.map(formatRow),
+        measures: measures.map(formatRow),
+      },
+      examples: exampleText,
+      prompt: prompt,
+    }
+  }
+
 
   const isSummarizationPrompt = async (prompt: string) => {
     const contents = `
@@ -627,6 +725,7 @@ ${exploreRefinementExamples &&
     [currentExplore],
   )
 
+  let sharedContextforShadow = {}
   const generateExploreParams = useCallback(
     async (
       prompt: string,
@@ -634,6 +733,7 @@ ${exploreRefinementExamples &&
       measures: any[],
       exploreGenerationExamples: any[],
     ) => {
+      sharedContextforShadow = generateSharedContextForShadow(prompt, dimensions, measures, exploreGenerationExamples) || {}
       if (!dimensions.length || !measures.length) {
         showBoundary(new Error('Dimensions or measures are not defined'))
         return
@@ -675,6 +775,8 @@ ${exploreRefinementExamples &&
       let response = ''
       if (AI_ENDPOINT) {
         response = await cloudFunction(wrappedMessage, parameters)
+        // Call the shadow function with shared context
+         await cloudFunctionWithContext(sharedContextforShadow?.prompt||'', parameters, sharedContextforShadow)
       } else if (
         VERTEX_BIGQUERY_LOOKER_CONNECTION_NAME &&
         VERTEX_BIGQUERY_MODEL_ID
@@ -699,7 +801,7 @@ ${exploreRefinementExamples &&
       return false
     }
     try {
-      const response = settings.useCloudFunction.value ? await cloudFunction('test', {}) : await vertexBigQuery('test', {})
+      const response = settings.useCloudFunction.value ? await cloudFunctionWithContext('test', {}, sharedContextforShadow) : await vertexBigQuery('test', {})
       
       if (response !== '' && !response.includes('Failed to authenticate')) {
         dispatch(setVertexTestSuccessful(true))
