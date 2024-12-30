@@ -155,7 +155,7 @@ const useSendVertexMessage = () => {
       if (response.ok) {
         const responseData = await response.body
         console.log('Response data:', responseData)
-        return responseData.trim()
+        return responseData
       } else {
         console.error('Error response from serverProxy:', response.statusText)
         return `Error: ${response.statusText}`
@@ -206,7 +206,7 @@ const useSendVertexMessage = () => {
       if (response.ok) {
         const responseData = await response.body
         console.log('Response data with context:', responseData)
-        return responseData.trim()
+        return responseData
       } else {
         console.error('Error response from serverProxy with context:', response.statusText)
         return `Error: ${response.statusText}`
@@ -801,14 +801,17 @@ ${exploreRefinementExamples &&
       return false
     }
     try {
-      const response = settings.useCloudFunction.value ? await cloudFunctionWithContext('test', {}, sharedContextforShadow) : await vertexBigQuery('test', {})
-      
-      if (response !== '' && !response.includes('Failed to authenticate')) {
+      const response = settings.useCloudFunction.value ? await cloudFunctionWithContext('Please describe the real estate market in Seattle.', {}, sharedContextforShadow) : await vertexBigQuery('test', {})
+      console.log('Response from test:', response)
+      // type of response
+      console.log(typeof response)
+      if (JSON.stringify(response) !== '' && !JSON.stringify(response).includes('Failed to authenticate')) {
         dispatch(setVertexTestSuccessful(true))
+        return true
       } else {
         dispatch(setVertexTestSuccessful(false))
+        return false
       }
-      return response !== '' && !response.includes('Failed to authenticate')
     } catch (error) {
       console.error('Error testing Vertex settings:', error)
       dispatch(setVertexTestSuccessful(false))
