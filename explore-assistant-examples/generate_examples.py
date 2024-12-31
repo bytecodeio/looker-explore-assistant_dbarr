@@ -220,7 +220,9 @@ def categorize_urls(data, sdk):
         if vis_config:
             vis_json_str = vis_config.group(1)
             vis_type = re.search(r'("type":\s*"([^,}]+))', vis_json_str)
-            decoded_url_modifiedvisjson = re.sub(r"(&vis=(.)*(?=&|$))", "&vis={" + (vis_type.group(1) if vis_type else '') + "}", decoded_url_nofilterconfig)
+            # Escape quotes in the vis_type group
+            vis_type_str = vis_type.group(1).replace('"', '\\"') if vis_type else ''
+            decoded_url_modifiedvisjson = re.sub(r"(&vis=(.)*(?=&|$))", "&vis={" + vis_type_str + "}", decoded_url_nofilterconfig)
         else:
             decoded_url_modifiedvisjson = decoded_url_nofilterconfig
 
