@@ -155,7 +155,15 @@ const useSendVertexMessage = () => {
       if (response.ok) {
         const responseData = await response.body
         console.log('Response data:', responseData)
-        return responseData
+        
+        // Parse the response and extract chat_response
+        try {
+          const parsedResponse = typeof responseData === 'string' ? JSON.parse(responseData) : responseData
+          return parsedResponse.chat_response || `Error: No chat response found`
+        } catch (error) {
+          console.error('Error parsing response:', error)
+          return `Error: Invalid response format`
+        }
       } else {
         console.error('Error response from serverProxy:', response.statusText)
         return `Error: ${response.statusText}`
@@ -184,7 +192,7 @@ const useSendVertexMessage = () => {
         property_id: "some_property_id",
         user_id: "some_user_id",
       },
-      context: sharedContext,
+      product_info: sharedContext,
     })
 
     try {
@@ -206,7 +214,15 @@ const useSendVertexMessage = () => {
       if (response.ok) {
         const responseData = await response.body
         console.log('Response data with context:', responseData)
-        return responseData
+        
+        // Parse the response and extract chat_response
+        try {
+          const parsedResponse = typeof responseData === 'string' ? JSON.parse(responseData) : responseData
+          return parsedResponse.chat_response || `Error: No chat response found`
+        } catch (error) {
+          console.error('Error parsing response with context:', error)
+          return `Error: Invalid response format`
+        }
       } else {
         console.error('Error response from serverProxy with context:', response.statusText)
         return `Error: ${response.statusText}`
