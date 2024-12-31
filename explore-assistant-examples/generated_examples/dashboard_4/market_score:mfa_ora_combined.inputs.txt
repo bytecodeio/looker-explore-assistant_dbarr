@@ -1,0 +1,14 @@
+[
+    {
+        "input": "What was the average ORA score for the US market in December 2021 to December 2022?",
+        "output": "fields=mfa_ora_combined.month_year_date,mfa_ora_combined.orascore,mfa_ora_combined.max_orascore&f[mfa_ora_combined.country]=US&f[mfa_ora_combined.market_name]=NOTAPPLICABLE&f[mfa_ora_combined.region]=NOTAPPLICABLE&f[mfa_ora_combined.sub_market_name]=NOTAPPLICABLE&f[mfa_ora_combined.zipcode]=NOTAPPLICABLE&f[mfa_ora_combined.region_type]=&f[mfa_ora_combined.month_year_month]=2021/12/20 to 2022/12/19&sorts=mfa_ora_combined.month_year_date desc&limit=1&column_limit=50&vis={\"type\":\"looker_pie\"}"
+    },
+    {
+        "input": "What was the average ORA score for the US market in December 2022?",
+        "output": "fields=mfa_ora_combined.month_year_date,mfa_ora_combined.orascore,mfa_ora_combined.max_orascore&f[mfa_ora_combined.country]=US&f[mfa_ora_combined.market_name]=NOTAPPLICABLE&f[mfa_ora_combined.region]=NOTAPPLICABLE&f[mfa_ora_combined.sub_market_name]=NOTAPPLICABLE&f[mfa_ora_combined.zipcode]=NOTAPPLICABLE&f[mfa_ora_combined.region_type]=&f[mfa_ora_combined.month_year_month]=2022/12/20 to 2022/12/19&sorts=mfa_ora_combined.month_year_date desc&limit=1&column_limit=50&vis={\"type\":\"looker_pie\"}"
+    },
+    {
+        "input": "What was the average ORA score for the US market in December 2022?",
+        "output": "fields=mfa_ora_combined.month_year_date,mfa_ora_combined.orascore,mfa_ora_combined.max_orascore&f[mfa_ora_combined.country]=US&f[mfa_ora_combined.market_name]=NOTAPPLICABLE&f[mfa_ora_combined.region]=NOTAPPLICABLE&f[mfa_ora_combined.sub_market_name]=NOTAPPLICABLE&f[mfa_ora_combined.zipcode]=NOTAPPLICABLE&f[mfa_ora_combined.region_type]=&f[mfa_ora_combined.month_year_month]=2021/12/20 to 2022/12/19&sorts=mfa_ora_combined.month_year_date desc&limit=1&column_limit=50&vis={\"type\":\"looker_pie\"}"
+    }
+]

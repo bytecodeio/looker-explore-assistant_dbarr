@@ -1,0 +1,25 @@
+
+    Dimensions Used to group by information:
+ name: mfa_netinventoryquarterly_combined.annualnetinventoryratio, type: number, description:  
+name: mfa_netinventoryquarterly_combined.country, type: string, description:  
+name: mfa_netinventoryquarterly_combined.id, type: string, description:  
+name: mfa_netinventoryquarterly_combined.market_name, type: string, description:  
+name: mfa_netinventoryquarterly_combined.month_year_date, type: date_date, description:  
+name: mfa_netinventoryquarterly_combined.month_year_month, type: date_month, description:  
+name: mfa_netinventoryquarterly_combined.month_year_quarter, type: date_quarter, description:  
+name: mfa_netinventoryquarterly_combined.month_year_raw, type: date_raw, description:  
+name: mfa_netinventoryquarterly_combined.month_year_week, type: date_week, description:  
+name: mfa_netinventoryquarterly_combined.month_year_year, type: date_year, description:  
+name: mfa_netinventoryquarterly_combined.period, type: string, description: The timeslice formatted as QQ/YY 
+name: mfa_netinventoryquarterly_combined.region, type: string, description:  
+name: mfa_netinventoryquarterly_combined.region_code, type: string, description:  
+name: mfa_netinventoryquarterly_combined.region_type, type: string, description:  
+name: mfa_netinventoryquarterly_combined.sub_market_name, type: string, description:  
+name: mfa_netinventoryquarterly_combined.timeslice, type: string, description:  
+name: mfa_netinventoryquarterly_combined.zipcode, type: zipcode, description:  
+
+    Measures are used to perform calculations/aggregations (if top, bottom, total, sum, etc. are used include a measure):
+ name: mfa_netinventoryquarterly_combined.avg_annualnetinventoryratio, type: average, description:  
+name: mfa_netinventoryquarterly_combined.count, type: count, description:  
+
+    

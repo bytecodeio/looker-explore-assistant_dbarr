@@ -1,0 +1,22 @@
+[
+    {
+        "input": "What was the market score for the US market in 2022?",
+        "output": "fields=mfa_marketscore_combined.market_score,mfa_marketscore_combined.month_year_date&f[mfa_marketscore_combined.country]=US&f[mfa_marketscore_combined.market_name]=NOTAPPLICABLE&f[mfa_marketscore_combined.region]=NOTAPPLICABLE&f[mfa_marketscore_combined.sub_market_name]=NOTAPPLICABLE&f[mfa_marketscore_combined.zipcode]=NOTAPPLICABLE&f[mfa_marketscore_combined.month_year_month]=2022/01/01 to 2022/12/02&sorts=mfa_marketscore_combined.month_year_date desc&limit=1&column_limit=50&vis={\"type\":\"single_value\"}"
+    },
+    {
+        "input": "What is the market score for the US region, excluding the NOTAPPLICABLE market and sub-market, for the zip code NOTAPPLICABLE, from August 26, 2023 to December 19, 2024?",
+        "output": "fields=mfa_marketscore_combined.market_score,mfa_marketscore_combined.month_year_month&f[mfa_marketscore_combined.country]=US&f[mfa_marketscore_combined.market_name]=NOTAPPLICABLE&f[mfa_marketscore_combined.region]=SOUTH&f[mfa_marketscore_combined.sub_market_name]=NOTAPPLICABLE&f[mfa_marketscore_combined.zipcode]=NOTAPPLICABLE&f[mfa_marketscore_combined.month_year_month]=2023/08/26 to 2024/12/19&sorts=mfa_marketscore_combined.month_year_month desc&limit=500&column_limit=50&vis={\"type\":\"looker_line\"}"
+    },
+    {
+        "input": "What is the market score for the US market in January 2022?",
+        "output": "fields=mfa_marketscore_combined.market_score,mfa_marketscore_combined.month_year_date&f[mfa_marketscore_combined.country]=US&f[mfa_marketscore_combined.market_name]=NOTAPPLICABLE&f[mfa_marketscore_combined.region]=NOTAPPLICABLE&f[mfa_marketscore_combined.sub_market_name]=NOTAPPLICABLE&f[mfa_marketscore_combined.zipcode]=NOTAPPLICABLE&f[mfa_marketscore_combined.month_year_month]=2022/01/01 to 2022/12/02&sorts=mfa_marketscore_combined.month_year_date desc&limit=1&column_limit=50&vis={\"type\":\"single_value\"}"
+    },
+    {
+        "input": "What was the market score for the US market in January 2022?",
+        "output": "fields=mfa_marketscore_combined.market_score,mfa_marketscore_combined.month_year_date&f[mfa_marketscore_combined.country]=US&f[mfa_marketscore_combined.market_name]=NOTAPPLICABLE&f[mfa_marketscore_combined.region]=NOTAPPLICABLE&f[mfa_marketscore_combined.sub_market_name]=NOTAPPLICABLE&f[mfa_marketscore_combined.zipcode]=NOTAPPLICABLE&f[mfa_marketscore_combined.month_year_month]=2022/01/01 to 2022/12/02&sorts=mfa_marketscore_combined.month_year_date desc&limit=1&column_limit=50&vis={\"type\":\"single_value\"}"
+    },
+    {
+        "input": "What is the market score for the US South region from August 26, 2023 to December 19, 2024?",
+        "output": "fields=mfa_marketscore_combined.market_score,mfa_marketscore_combined.month_year_month&f[mfa_marketscore_combined.country]=US&f[mfa_marketscore_combined.market_name]=NOTAPPLICABLE&f[mfa_marketscore_combined.region]=SOUTH&f[mfa_marketscore_combined.sub_market_name]=NOTAPPLICABLE&f[mfa_marketscore_combined.zipcode]=NOTAPPLICABLE&f[mfa_marketscore_combined.month_year_month]=2023/08/26 to 2024/12/19&sorts=mfa_marketscore_combined.month_year_month desc&limit=500&column_limit=50&vis={\"type\":\"looker_line\"}"
+    }
+]

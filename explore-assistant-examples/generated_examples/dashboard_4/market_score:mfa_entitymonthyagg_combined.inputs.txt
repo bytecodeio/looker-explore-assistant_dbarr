@@ -1,0 +1,18 @@
+[
+    {
+        "input": "What is the average annual revenue change for the US market from January 1st, 2022 to December 19th, 2022?",
+        "output": "fields=mfa_entitymonthyagg_combined.month_year_date,mfa_entitymonthyagg_combined.month_year_month,mfa_entitymonthyagg_combined.avg_annualrevenue_change&f[mfa_entitymonthyagg_combined.country]=US&f[mfa_entitymonthyagg_combined.market_name]=NOTAPPLICABLE&f[mfa_entitymonthyagg_combined.region]=NOTAPPLICABLE&f[mfa_entitymonthyagg_combined.sub_market_name]=NOTAPPLICABLE&f[mfa_entitymonthyagg_combined.zipcode]=NOTAPPLICABLE&f[mfa_entitymonthyagg_combined.month_year_month]=2022/01/01 to 2022/12/19&f[mfa_entitymonthyagg_combined.region_type]=COUNTRY&sorts=mfa_entitymonthyagg_combined.month_year_date desc&limit=500&column_limit=50&vis={\"type\":\"looker_column\"}"
+    },
+    {
+        "input": "What is the average annual rent change for the US market in 2022?",
+        "output": "fields=mfa_entitymonthyagg_combined.month_year_month,mfa_entitymonthyagg_combined.month_year_date,mfa_entitymonthyagg_combined.avg_annualrent_change&f[mfa_entitymonthyagg_combined.country]=US&f[mfa_entitymonthyagg_combined.market_name]=NOTAPPLICABLE&f[mfa_entitymonthyagg_combined.region]=NOTAPPLICABLE&f[mfa_entitymonthyagg_combined.sub_market_name]=&f[mfa_entitymonthyagg_combined.zipcode]=NOTAPPLICABLE&f[mfa_entitymonthyagg_combined.month_year_month]=2022/01/01 to 2022/12/19&sorts=mfa_entitymonthyagg_combined.month_year_month&limit=500&column_limit=50&vis={\"type\":\"linear\"}"
+    },
+    {
+        "input": "What is the average annual revenue change for US-based companies in 2022, excluding companies in specific markets, regions, sub-markets, and zip codes?",
+        "output": "fields=mfa_entitymonthyagg_combined.month_year_date,mfa_entitymonthyagg_combined.month_year_month,mfa_entitymonthyagg_combined.avg_annualrevenue_change&f[mfa_entitymonthyagg_combined.country]=US&f[mfa_entitymonthyagg_combined.market_name]=NOTAPPLICABLE&f[mfa_entitymonthyagg_combined.region]=NOTAPPLICABLE&f[mfa_entitymonthyagg_combined.sub_market_name]=NOTAPPLICABLE&f[mfa_entitymonthyagg_combined.zipcode]=NOTAPPLICABLE&f[mfa_entitymonthyagg_combined.month_year_month]=2022/01/01 to 2022/12/19&f[mfa_entitymonthyagg_combined.region_type]=COUNTRY&sorts=mfa_entitymonthyagg_combined.month_year_date desc&limit=500&column_limit=50&vis={\"type\":\"looker_column\"}"
+    },
+    {
+        "input": "What is the average annual rent change for the United States in 2022?",
+        "output": "fields=mfa_entitymonthyagg_combined.month_year_month,mfa_entitymonthyagg_combined.month_year_date,mfa_entitymonthyagg_combined.avg_annualrent_change&f[mfa_entitymonthyagg_combined.country]=US&f[mfa_entitymonthyagg_combined.market_name]=NOTAPPLICABLE&f[mfa_entitymonthyagg_combined.region]=NOTAPPLICABLE&f[mfa_entitymonthyagg_combined.sub_market_name]=&f[mfa_entitymonthyagg_combined.zipcode]=NOTAPPLICABLE&f[mfa_entitymonthyagg_combined.month_year_month]=2022/01/01 to 2022/12/19&sorts=mfa_entitymonthyagg_combined.month_year_month&limit=500&column_limit=50&vis={\"type\":\"linear\"}"
+    }
+]

@@ -61,9 +61,18 @@ def format_explore_metadata(data):
     Measures are used to perform calculations/aggregations (if top, bottom, total, sum, etc. are used include a measure):\n {''.join(data['measures'])}
     """
 
-# Fetch Query URL Metadata
-def fetch_query_url_metadata(sdk, explore):
+# Modified fetch_query_url_metadata to support dashboard_id
+def fetch_query_url_metadata(sdk, explore=None, dashboard_id=None):
     try:
+        filters = {
+            "history.status": "complete",
+        }
+        
+        if explore:
+            filters["query.view"] = explore
+        if dashboard_id:
+            filters["dashboard.id"] = dashboard_id
+            
         response = sdk.run_inline_query(
             result_format='json',
             cache=True,
@@ -73,6 +82,7 @@ def fetch_query_url_metadata(sdk, explore):
                 fields=[
                     "query.slug",
                     "query.view",
+                    "query.model",  # Added model field
                     "query.dynamic_fields",
                     "query.formatted_fields",
                     "query.filters",
@@ -83,13 +93,9 @@ def fetch_query_url_metadata(sdk, explore):
                     "query.column_limit",
                     "query.count"
                 ],
-                filters={
-                    "query.view": explore,
-                    "history.status": "complete",
-                },
+                filters=filters,
                 sorts=[
                     "history.completed_time desc",
-                    "query.view"
                 ],
                 limit="30",
             )
@@ -283,7 +289,6 @@ def generate_input_examples(sdk, model, explore):
                                 url_prompts.append(json.loads(cleaned_response))
                             except json.JSONDecodeError as e:
                                 print(f"Failed to decode JSON: {e}")
-                                print(f"Response: {cleaned_response}")
                         else:
                             print("Empty response received from generate_input")
                     
@@ -311,14 +316,93 @@ def create_example_files(model, explore, project_id, location, chain_load):
         json_file = f"./generated_examples/{model}:{explore}.inputs.txt"
         load_examples(project_id, "explore_assistant", "explore_assistant_examples", "examples", f"{model}:{explore}", json_file)
 
+# New function to handle dashboard examples
+def create_example_files_for_dashboard(dashboard_id, project_id, location, chain_load):
+    sdk = init_looker_sdk()
+    
+    # Fetch queries for the dashboard
+    data = fetch_query_url_metadata(sdk, dashboard_id=dashboard_id)
+    if not data:
+        print(f"No queries found for dashboard {dashboard_id}")
+        return
+
+    # Track unique model:explore combinations
+    model_explore_pairs = set()
+    for query in data:
+        if query.get('query.model') and query.get('query.view'):
+            model_explore_pairs.add(f"{query['query.model']}:{query['query.view']}")
+    
+    # Initialize Vertex AI
+    vertexai.init(project=project_id, location=location)
+    
+    # Process each unique model:explore pair
+    for pair in model_explore_pairs:
+        model, explore = pair.split(':')
+        
+        # Create directory if it doesn't exist
+        os.makedirs(f"./generated_examples/dashboard_{dashboard_id}", exist_ok=True)
+        
+        # Fetch explore metadata
+        metadata = fetch_explore_metadata(sdk, model, explore, 'fields')
+        with open(f"./generated_examples/dashboard_{dashboard_id}/{model}:{explore}.txt", "w") as f:
+            f.write(format_explore_metadata(metadata))
+
+        # Generate input examples for this model:explore pair
+        url_prompts = []
+        filtered_data = [q for q in data if q['query.model'] == model and q['query.view'] == explore]
+        categorized_queries = categorize_urls(filtered_data, sdk)
+        
+        # Generate examples using existing logic
+        for key in categorized_queries.keys():
+            if isinstance(categorized_queries[key], list):
+                for url in categorized_queries[key][0:3]:
+                    response = generate_input(json.dumps({"input": "", "output": url}))
+                    cleaned_response = re.sub(r'```json\n|```', '', response).strip()
+                    if cleaned_response:
+                        try:
+                            url_prompts.append(json.loads(cleaned_response))
+                        except json.JSONDecodeError as e:
+                            print(f"Failed to decode JSON: {e}")
+
+        # Save examples for this model:explore pair
+        examples_file = f"./generated_examples/dashboard_{dashboard_id}/{model}:{explore}.inputs.txt"
+        with open(examples_file, "w") as f:
+            json.dump(url_prompts, f, indent=4)
+
+        # Load examples if requested
+        if chain_load:
+            load_examples(
+                project_id=project_id,
+                dataset_id="explore_assistant",
+                table_id="explore_assistant_examples",
+                column_name="examples",
+                explore_id=f"{model}:{explore}",
+                json_file=examples_file
+            )
+
 # Command-line argument parsing
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Generate example files for a given explore.")
-    parser.add_argument("--model", required=True, help="Looker model name.")
-    parser.add_argument("--explore", required=True, help="Looker explore name.")
+    parser = argparse.ArgumentParser(description="Generate example files for a given explore or dashboard.")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--dashboard_id", help="Looker dashboard ID")
+    group.add_argument("--model", help="Looker model name")
+    parser.add_argument("--explore", help="Looker explore name (required if --model is specified)")
     parser.add_argument("--project_id", required=True, help="Google Cloud project ID")
     parser.add_argument("--location", required=True, help="Google Cloud location")
     parser.add_argument("--chain_load", action="store_true", help="Load examples into BigQuery after generating them")
     args = parser.parse_args()
 
-    create_example_files(args.model, args.explore, args.project_id, args.location, args.chain_load)  
+    if args.model and not args.explore:
+        parser.error("--explore is required when --model is specified")
+
+    if args.dashboard_id:
+        create_example_files_for_dashboard(args.dashboard_id, args.project_id, args.location, args.chain_load)
+    else:
+        create_example_files(args.model, args.explore, args.project_id, args.location, args.chain_load)
+
+# EXAMPLE CALLS
+# # Dashboard mode
+# python generate_examples.py --dashboard_id 123 --project_id my-project --location us-central1 --chain_load
+
+# # Original explore mode
+# python generate_examples.py --model my_model --explore my_explore --project_id my-project --location us-central1 --chain_load

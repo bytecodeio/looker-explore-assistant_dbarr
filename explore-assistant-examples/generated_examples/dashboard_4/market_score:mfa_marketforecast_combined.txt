@@ -1,0 +1,21 @@
+
+    Dimensions Used to group by information:
+ name: mfa_marketforecast_combined.country, type: string, description:  
+name: mfa_marketforecast_combined.id, type: string, description:  
+name: mfa_marketforecast_combined.market_name, type: string, description: marketname test 
+name: mfa_marketforecast_combined.occupancy, type: number, description:  
+name: mfa_marketforecast_combined.period, type: string, description:  
+name: mfa_marketforecast_combined.region, type: string, description:  
+name: mfa_marketforecast_combined.region_code, type: string, description: regioncode 
+name: mfa_marketforecast_combined.region_type, type: string, description: region test 
+name: mfa_marketforecast_combined.rent, type: number, description:  
+name: mfa_marketforecast_combined.sub_market_name, type: string, description:  
+name: mfa_marketforecast_combined.timeslice, type: string, description: timeslice test 
+name: mfa_marketforecast_combined.zipcode, type: zipcode, description:  
+
+    Measures are used to perform calculations/aggregations (if top, bottom, total, sum, etc. are used include a measure):
+ name: mfa_marketforecast_combined.count, type: count, description:  
+name: mfa_marketforecast_combined.total_occupancy, type: average, description:  
+name: mfa_marketforecast_combined.total_rent, type: sum, description:  
+
+    

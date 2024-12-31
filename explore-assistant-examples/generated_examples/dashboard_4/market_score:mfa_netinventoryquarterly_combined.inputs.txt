@@ -1,0 +1,18 @@
+[
+    {
+        "input": "What is the average annual net inventory ratio for the United States in 2022, broken down by month and quarter?",
+        "output": "fields=mfa_netinventoryquarterly_combined.month_year_quarter,mfa_netinventoryquarterly_combined.avg_annualnetinventoryratio&fill_fields=mfa_netinventoryquarterly_combined.month_year_quarter&f[mfa_netinventoryquarterly_combined.country]=US&f[mfa_netinventoryquarterly_combined.market_name]=NOTAPPLICABLE&f[mfa_netinventoryquarterly_combined.region]=NOTAPPLICABLE&f[mfa_netinventoryquarterly_combined.sub_market_name]=NOTAPPLICABLE&f[mfa_netinventoryquarterly_combined.zipcode]=NOTAPPLICABLE&f[mfa_netinventoryquarterly_combined.month_year_month]=2022/01/01 to 2022/12/19&sorts=mfa_netinventoryquarterly_combined.month_year_quarter,mfa_netinventoryquarterly_combined.avg_annualnetinventoryratio&limit=500&column_limit=50&vis={\"type\":\"linear\"}"
+    },
+    {
+        "input": "What is the average annual net inventory ratio for the US market from January 1, 2022 to December 19, 2022?",
+        "output": "fields=mfa_netinventoryquarterly_combined.month_year_quarter,mfa_netinventoryquarterly_combined.avg_annualnetinventoryratio&fill_fields=mfa_netinventoryquarterly_combined.month_year_quarter&f[mfa_netinventoryquarterly_combined.country]=US&f[mfa_netinventoryquarterly_combined.market_name]=NOTAPPLICABLE&f[mfa_netinventoryquarterly_combined.region]=NOTAPPLICABLE&f[mfa_netinventoryquarterly_combined.sub_market_name]=NOTAPPLICABLE&f[mfa_netinventoryquarterly_combined.zipcode]=NOTAPPLICABLE&f[mfa_netinventoryquarterly_combined.month_year_month]=2022/01/01 to 2022/12/19&sorts=mfa_netinventoryquarterly_combined.month_year_quarter&limit=500&column_limit=50&vis={\"type\":\"looker_line\"}"
+    },
+    {
+        "input": "What is the average annual net inventory ratio for the United States market from January 1, 2022 to December 19, 2022, excluding the markets of NOTAPPLICABLE, and excluding the regions, sub-markets, and zipcodes of NOTAPPLICABLE?",
+        "output": "fields=mfa_netinventoryquarterly_combined.month_year_quarter,mfa_netinventoryquarterly_combined.avg_annualnetinventoryratio&fill_fields=mfa_netinventoryquarterly_combined.month_year_quarter&f[mfa_netinventoryquarterly_combined.country]=US&f[mfa_netinventoryquarterly_combined.market_name]=NOTAPPLICABLE&f[mfa_netinventoryquarterly_combined.region]=NOTAPPLICABLE&f[mfa_netinventoryquarterly_combined.sub_market_name]=NOTAPPLICABLE&f[mfa_netinventoryquarterly_combined.zipcode]=NOTAPPLICABLE&f[mfa_netinventoryquarterly_combined.month_year_month]=2022/01/01 to 2022/12/19&sorts=mfa_netinventoryquarterly_combined.month_year_quarter,mfa_netinventoryquarterly_combined.avg_annualnetinventoryratio&limit=500&column_limit=50&vis={\"type\":\"linear\"}"
+    },
+    {
+        "input": "What is the average annual net inventory ratio for the US market in 2022?",
+        "output": "fields=mfa_netinventoryquarterly_combined.month_year_quarter,mfa_netinventoryquarterly_combined.avg_annualnetinventoryratio&fill_fields=mfa_netinventoryquarterly_combined.month_year_quarter&f[mfa_netinventoryquarterly_combined.country]=US&f[mfa_netinventoryquarterly_combined.market_name]=NOTAPPLICABLE&f[mfa_netinventoryquarterly_combined.region]=NOTAPPLICABLE&f[mfa_netinventoryquarterly_combined.sub_market_name]=NOTAPPLICABLE&f[mfa_netinventoryquarterly_combined.zipcode]=NOTAPPLICABLE&f[mfa_netinventoryquarterly_combined.month_year_month]=2022/01/01 to 2022/12/19&sorts=mfa_netinventoryquarterly_combined.month_year_quarter&limit=500&column_limit=50&vis={\"type\":\"looker_line\"}"
+    }
+]
