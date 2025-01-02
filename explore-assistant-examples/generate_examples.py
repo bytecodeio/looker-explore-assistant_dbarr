@@ -258,6 +258,18 @@ def generate_input(request):
     )
     return response.text
 
+def validate_example_json(json_obj):
+    """Validate that the example JSON has the required structure."""
+    if not isinstance(json_obj, dict):
+        return False
+    if 'input' not in json_obj or 'output' not in json_obj:
+        return False
+    if not isinstance(json_obj['input'], str) or not isinstance(json_obj['output'], str):
+        return False
+    if not json_obj['input'].strip() or not json_obj['output'].strip():
+        return False
+    return True
+
 # Create categorized input queries
 def generate_input_examples(sdk, model, explore):
     url_prompts = []
@@ -272,10 +284,13 @@ def generate_input_examples(sdk, model, explore):
                 cleaned_response = re.sub(r'```json\n|```', '', response).strip()
                 if cleaned_response:
                     try:
-                        url_prompts.append(json.loads(cleaned_response))
+                        json_obj = json.loads(cleaned_response)
+                        if validate_example_json(json_obj):
+                            url_prompts.append(json_obj)
+                        else:
+                            print(f"Invalid example format: {cleaned_response}")
                     except json.JSONDecodeError as e:
                         print(f"Failed to decode JSON: {e}")
-                        print(f"Response: {cleaned_response}")
                 else:
                     print("Empty response received from generate_input")
         else:
@@ -288,12 +303,19 @@ def generate_input_examples(sdk, model, explore):
                         cleaned_response = re.sub(r'```json\n|```', '', response).strip()
                         if cleaned_response:
                             try:
-                                url_prompts.append(json.loads(cleaned_response))
+                                json_obj = json.loads(cleaned_response)
+                                if validate_example_json(json_obj):
+                                    url_prompts.append(json_obj)
+                                else:
+                                    print(f"Invalid example format: {cleaned_response}")
                             except json.JSONDecodeError as e:
                                 print(f"Failed to decode JSON: {e}")
                         else:
                             print("Empty response received from generate_input")
-                    
+
+    if not url_prompts:
+        print(f"Warning: No valid examples generated for {model}:{explore}")
+        return
 
     # Write the JSON objects to the file as a list
     with open(f"./generated_examples/{model}:{explore}.inputs.txt", "w") as f:
@@ -362,9 +384,17 @@ def create_example_files_for_dashboard(dashboard_id, project_id, location, chain
                     cleaned_response = re.sub(r'```json\n|```', '', response).strip()
                     if cleaned_response:
                         try:
-                            url_prompts.append(json.loads(cleaned_response))
+                            json_obj = json.loads(cleaned_response)
+                            if validate_example_json(json_obj):
+                                url_prompts.append(json_obj)
+                            else:
+                                print(f"Invalid example format: {cleaned_response}")
                         except json.JSONDecodeError as e:
                             print(f"Failed to decode JSON: {e}")
+
+        if not url_prompts:
+            print(f"Warning: No valid examples generated for {model}:{explore}")
+            continue
 
         # Save examples for this model:explore pair
         examples_file = f"./generated_examples/dashboard_{dashboard_id}/{model}:{explore}.inputs.txt"
