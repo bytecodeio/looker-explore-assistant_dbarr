@@ -512,7 +512,9 @@ ${exploreRefinementExamples &&
           filterResponseJSON[filter.field_id] = []
         }
         // Push the filter_expression into the array
-        filterResponseJSON[filter.field_id].push(filter.filter_expression)
+
+        filterResponseJSON[filter.field_id].push(filter.filter_expression?.replace('+', ' '))
+
       })
 
       console.log('filterResponseInitial', filterResponseInitial)
