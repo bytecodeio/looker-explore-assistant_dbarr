@@ -66,6 +66,7 @@ const AgentPage = () => {
     semanticModels,
     isBigQueryMetadataLoaded,
     isSemanticModelLoaded,
+    canonicalIds
   } = useSelector((state: RootState) => state.assistant as AssistantState)
 
   const explores = Object.keys(examples.exploreSamples).map((key) => {
@@ -151,6 +152,7 @@ const AgentPage = () => {
       dimensions,
       measures,
       exploreGenerationExamples,
+      canonicalIds
     )
     console.log('New Explore URL: ', newExploreParams)
     dispatch(setIsQuerying(false))

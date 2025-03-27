@@ -14,6 +14,7 @@ const SamplePrompts = () => {
   const {
     currentExplore: { modelName, exploreId },
     examples: { exploreSamples },
+    canonicalIds
   } = useSelector((state: RootState) => state.assistant as AssistantState)
 
   const samples = exploreSamples[`${modelName}:${exploreId}`]
@@ -33,7 +34,8 @@ const SamplePrompts = () => {
           className="flex flex-col w-56 min-h-44 bg-gray-200/50 hover:bg-gray-200 rounded-lg cursor-pointer text-sm p-4 m-2"
           key={index}
           onClick={() => {
-            handleSubmit(item.prompt)
+            canonicalIds.length > 0?
+            handleSubmit(item.prompt):''
           }}
         >
           <div className="flex-grow font-light line-camp-5">{item.prompt}</div>

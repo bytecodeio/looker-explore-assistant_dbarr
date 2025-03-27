@@ -1,6 +1,6 @@
 import { ExtensionContext } from '@looker/extension-sdk-react'
-import { useCallback, useContext } from 'react'
-import { useSelector } from 'react-redux'
+import { useCallback, useContext, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import CryptoJS from 'crypto-js'
 import { RootState } from '../store'
 import process from 'process'
@@ -16,7 +16,6 @@ import { ModelParameters } from '../utils/VertexHelper'
 import { BigQueryHelper } from '../utils/BigQueryHelper'
 import { ExploreParams } from '../slices/assistantSlice'
 import { ExploreFilterValidator, FieldType } from '../utils/ExploreFilterHelper'
-
 
 const parseJSONResponse = (jsonString: string | null | undefined) => {
   if (typeof jsonString !== 'string') {
@@ -125,6 +124,7 @@ const useSendVertexMessage = () => {
 
       body: body,
     })
+    console.log("log response", await responseData.text)
     const response = await responseData.text()
     return response.trim()
   }
@@ -621,22 +621,33 @@ ${exploreRefinementExamples &&
     [currentExplore],
   )
 
+
   const generateExploreParams = useCallback(
     async (
       prompt: string,
       dimensions: any[],
       measures: any[],
       exploreGenerationExamples: any[],
+      canonicalIds: any[]
     ) => {
       if (!dimensions.length || !measures.length) {
         showBoundary(new Error('Dimensions or measures are not defined'))
         return
       }
+
       const sharedContext = generateSharedContext(dimensions, measures, exploreGenerationExamples) || ''
       const filterResponseJSON = await generateFilterParams(prompt, sharedContext, dimensions, measures)
       const responseJSON = await generateBaseExploreParams(prompt, sharedContext)
 
       responseJSON['filters'] = filterResponseJSON
+
+      if (canonicalIds.length > 0) {
+        responseJSON['filters']['user_banking_activity_view.reqctx_canonicalid'] = canonicalIds;
+      }
+
+      if (canonicalIds?.filter((id) => id.toString().toUpperCase() == "ALL").length > 0) {
+        responseJSON['filters']['user_banking_activity_view.reqctx_canonicalid'] = [];
+      }
 
       // get the visualizations
       // const visualizationResponseJSON = await generateVisualizationParams(

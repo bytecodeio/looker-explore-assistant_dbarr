@@ -2,15 +2,19 @@ import { Send } from '@material-ui/icons'
 import React, { useState, useRef, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store'
-import { setIsChatMode, setQuery } from '../../slices/assistantSlice'
+import { setCanonicalIds, setIsChatMode, setQuery } from '../../slices/assistantSlice'
 import clsx from 'clsx'
+import { Autocomplete, TextField, Typography } from '@mui/material'
 
 const PromptInput = () => {
   const dispatch = useDispatch()
   const [inputText, setInputText] = useState('')
+  //const [ids, setIds] = useState([]);
   const inputRef = useRef(null)
 
   const { isQuerying } = useSelector((state: RootState) => state.assistant)
+
+  const {canonicalIds} = useSelector((state: RootState) => state.assistant)
 
   const handleInputChange = (e: any) => {
     setInputText(e.target.value)
@@ -33,8 +37,19 @@ const PromptInput = () => {
       handleSubmit()
     }
   }
+
+  const handleIdChange = (e, v) => {
+    dispatch(setCanonicalIds(v));
+  }
   return (
     <div className="max-w-3xl mx-auto px-8 pt-4 pb-2 bg-white bg-opacity-80 rounded-md">
+      <Autocomplete freeSolo style={{paddingBottom:'10px'}}
+        multiple
+       options={[]}
+       value={canonicalIds}
+       onChange={handleIdChange}
+       renderInput={(params) => <TextField error={canonicalIds.length == 0} helperText={canonicalIds.length==0?"Enter ID to continue":""} {...params} label="Financial Institution ID" />}>
+       </Autocomplete>
       <div className="relative flex items-center bg-[rgb(240,244,249)] rounded-full p-2">
         <input
           ref={inputRef}
@@ -53,7 +68,7 @@ const PromptInput = () => {
         <div className="flex items-center space-x-2">
           <button
             onClick={handleSubmit}
-            disabled={isQuerying}
+            disabled={isQuerying || canonicalIds.length == 0}
             className={clsx("p-2 text-white  rounded-full transition-all duration-300 ease-in-out",
               inputText.trim() ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400',
               isQuerying ? 'animate-spin' : ''

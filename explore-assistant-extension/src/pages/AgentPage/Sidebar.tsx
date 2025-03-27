@@ -27,7 +27,7 @@ const Sidebar = ({ expanded, toggleDrawer }: SidebarProps) => {
   const dispatch = useDispatch()
   const [isExpanded, setIsExpanded] = React.useState(expanded)
   const [isSettingsOpen, setIsSettingsOpen] = React.useState(false)
-  const { isChatMode, isQuerying, history } = useSelector(
+  const { isChatMode, isQuerying, history, canonicalIds } = useSelector(
     (state: RootState) => state.assistant as AssistantState,
   )
 
@@ -143,7 +143,7 @@ const Sidebar = ({ expanded, toggleDrawer }: SidebarProps) => {
                   >
                     <div
                       className={`flex items-center cursor-pointer hover:underline`}
-                      onClick={() => handleHistoryClick(item)}
+                      onClick={() => canonicalIds.length > 0? handleHistoryClick(item):''}
                     >
                       <div className="">
                         <ChatBubbleOutline

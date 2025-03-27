@@ -126,7 +126,8 @@ export interface AssistantState {
   },
   settings: Settings,
   isBigQueryMetadataLoaded: boolean,
-  isSemanticModelLoaded: boolean
+  isSemanticModelLoaded: boolean,
+  canonicalIds: string[]
 }
 
 export const newThreadState = () => {
@@ -173,7 +174,8 @@ export const initialState: AssistantState = {
     },
   },
   isBigQueryMetadataLoaded: false,
-  isSemanticModelLoaded: false
+  isSemanticModelLoaded: false,
+  canonicalIds: [],
 }
 
 export const assistantSlice = createSlice({
@@ -322,6 +324,9 @@ export const assistantSlice = createSlice({
     },
     setCurrenExplore: (state, action: PayloadAction<AssistantState['currentExplore']>) => {
       state.currentExplore = action.payload
+    },
+    setCanonicalIds: (state, action:PayloadAction<string[]>) => {
+      state.canonicalIds = action.payload
     }
   },
 })
@@ -361,6 +366,8 @@ export const {
   setCurrenExplore,
 
   resetExploreAssistant,
+
+  setCanonicalIds,
 } = assistantSlice.actions
 
 export default assistantSlice.reducer
