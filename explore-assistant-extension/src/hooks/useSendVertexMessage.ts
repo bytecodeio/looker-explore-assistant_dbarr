@@ -252,7 +252,8 @@ ${exploreRefinementExamples &&
       Return "data summary" if the user is asking for a data summary, and "refining question" if the user is continuing to refine their question. Only output one answer, no more. Only return one those two options. If you're not sure, return "refining question".
 
     `
-    const response = await sendMessage(contents, {})
+    //const response = await sendMessage(contents, {})
+    const response = "refining question"
     return response === 'data summary'
   }
 
